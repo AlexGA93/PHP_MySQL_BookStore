@@ -1,4 +1,4 @@
-# PHP Course 2022
+# PHP / MySQL - Web App
 
 ## Docker integration
 In this case We want to mount and start a container to start our app. For this We can use the following command to crate a simple Apache server:
