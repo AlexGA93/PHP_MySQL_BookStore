@@ -1,6 +1,6 @@
 <?php
 
     // Mysql connection
-    $connection = mysqli_connect('localhost', 'root', '', '') or die('Connection failed!');
+    $conn = mysqli_connect('localhost','root','','shop_db') or die('connection failed');
 
 ?>

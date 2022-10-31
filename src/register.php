@@ -1,3 +1,51 @@
+<!-- PHP -->
+<?php
+    // importing config.php script code
+    // connection to mysql database
+    include 'config.php';
+
+    // Determine if a variable is declared and is not null
+    if( isset($_POST['submit']) ){
+
+        // take form information
+        $name = mysqli_real_escape_string( $conn, $_POST['name'] );
+        $email = mysqli_real_escape_string( $conn, $_POST['email'] );
+        // hashed password
+        $password = mysqli_real_escape_string( $conn, md5($_POST['password']) );
+        $repeat_password = mysqli_real_escape_string( $conn, md5($_POST['repeat_password']) );
+        $user_type = $_POST['user_type'];
+
+        // SQL SELECT QUERY
+        $sql_select_order = "SELECT * FROM `users` WHERE email = '$email' AND password = '$password'";
+        // SQL User insertion
+        $sql_insert_order = "INSERT INTO `users`(name, email, password, user_type) VALUES ('$name','$email','$repeat_password','$user_type')";
+
+        // confog query
+        $select_users = mysqli_query(
+            // connection
+            $conn,
+            // SQL query
+            $sql_order
+        ) or die ('Query failed!');
+
+        // check if table is empty by number of rows
+        if(mysqli_number_rows($select_users) > 0) {
+
+            $message[] = "User Already exist!";
+
+        }else if($password !== $repeat_password){
+
+            $message[] = "Passwords don't match!";
+
+        }else{
+
+            mysqli_query($conn, $sql_insert_order) or die ('Query failed!');
+            $message[] = "User registered successfully!";
+        }
+    }
+?>
+
+
 <!-- HTML -->
 <!DOCTYPE html>
 <html lang="en">
@@ -15,6 +63,22 @@
 
 </head>
 <body>
+
+    <!-- PHP Message Logic -->
+    <?php
+        if(isset($message)){
+            foreach($message as $message){
+                echo '
+                <div class="message">
+                    <span>.$message.</span>
+                    <i class="fas fa-times" onclick="this.parentElement.remove();"></i>
+                </div>
+                ';
+            }
+        }
+    ?>
+    <!-- ----------------- -->
+
     <div class="form-container">
         <form action="" method="post">
 
@@ -29,6 +93,9 @@
         
             <!-- input password -->
             <input type="password" name="password" placeholder="Enter Your Password" required class="box">
+
+            <!-- input password -->
+            <input type="password" name="repeat_password" placeholder="Enter Your Password" required class="box">
 
             <!-- select user or admin -->
             <select name="user_type">
