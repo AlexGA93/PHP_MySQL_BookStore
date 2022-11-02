@@ -20,18 +20,12 @@
         // SQL User insertion
         $sql_insert_order = "INSERT INTO `users`(name, email, password, user_type) VALUES ('$name','$email','$repeat_password','$user_type')";
 
-
-        // echo $sql_select_order;
-        // echo "<br />";
-        // echo $sql_insert_order;
-
         // request to the database
         $select_users = mysqli_query(
             // connection
             $conn,
             // SQL query
-            // $sql_select_order 
-            "SELECT * FROM `users` WHERE email = '$email' AND password = '$password'"
+            $sql_select_order 
         ) or die ('Query failed!');
 
         echo mysqli_num_rows($select_users);
