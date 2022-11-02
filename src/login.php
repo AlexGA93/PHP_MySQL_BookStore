@@ -26,11 +26,8 @@
             // connection
             $conn,
             // SQL query
-            // $sql_select_order 
-            "SELECT * FROM `users` WHERE email = '$email' AND password = '$password'"
+            $sql_select_order 
         ) or die ('Query failed!');
-
-        // echo mysqli_num_rows($select_users);
 
         // check if table is empty by number of rows
         if(mysqli_num_rows($select_users) > 0) {
