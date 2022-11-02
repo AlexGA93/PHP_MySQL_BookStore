@@ -20,27 +20,37 @@
         // SQL User insertion
         $sql_insert_order = "INSERT INTO `users`(name, email, password, user_type) VALUES ('$name','$email','$repeat_password','$user_type')";
 
-        // confog query
+
+        // echo $sql_select_order;
+        // echo "<br />";
+        // echo $sql_insert_order;
+
+        // request to the database
         $select_users = mysqli_query(
             // connection
             $conn,
             // SQL query
-            $sql_order
+            // $sql_select_order 
+            "SELECT * FROM `users` WHERE email = '$email' AND password = '$password'"
         ) or die ('Query failed!');
 
+        echo mysqli_num_rows($select_users);
+
         // check if table is empty by number of rows
-        if(mysqli_number_rows($select_users) > 0) {
+        if(mysqli_num_rows($select_users) > 0) {
 
-            $message[] = "User Already exist!";
-
-        }else if($password !== $repeat_password){
-
-            $message[] = "Passwords don't match!";
+            $message[] = "User already exist!";
 
         }else{
+            if($password != $repeat_password){
+                $message[] = "Passwords don't match!";
+            }else{
+                mysqli_query($conn, $sql_insert_order) or die ('Query failed!');
+                $message[] = "User registered successfully!";
 
-            mysqli_query($conn, $sql_insert_order) or die ('Query failed!');
-            $message[] = "User registered successfully!";
+                // redirect to login.php if mysqli_query returns user
+                header('location:login.php');
+            }
         }
     }
 ?>
@@ -67,13 +77,12 @@
     <!-- PHP Message Logic -->
     <?php
         if(isset($message)){
-            foreach($message as $message){
+            foreach($message as $message_mssg){
                 echo '
                 <div class="message">
-                    <span>.$message.</span>
+                    <span>'.$message_mssg.'</span>
                     <i class="fas fa-times" onclick="this.parentElement.remove();"></i>
-                </div>
-                ';
+                </div>';
             }
         }
     ?>
