@@ -1,5 +1,4 @@
-<!-- PHP -->
-<?php
+<?php session_start();
     // importing config.php script code
     // connection to mysql database
     include 'config.php';
@@ -28,7 +27,7 @@
             $sql_select_order 
         ) or die ('Query failed!');
 
-        echo mysqli_num_rows($select_users);
+        // echo mysqli_num_rows($select_users);
 
         // check if table is empty by number of rows
         if(mysqli_num_rows($select_users) > 0) {

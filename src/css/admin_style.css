@@ -203,7 +203,7 @@ section{
    border-radius: .5rem;
    border:var(--border);
    background-color: var(--white);
-   display: none;
+   /* display: none; */
    animation:fadeIn .2s linear;
 }
 
@@ -240,7 +240,7 @@ section{
 }
 
 #menu-btn{
-   display: none;
+   /* display: none; */
 }
 
 .dashboard .box-container{
