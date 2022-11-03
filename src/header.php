@@ -34,7 +34,7 @@
             <a href="index.php" class="logo">Bookly.</a>
 
             <nav class="navbar">
-                <a href="home.php">home</a>
+                <a href="index.php">home</a>
                 <a href="about.php">about</a>
                 <a href="shop.php">shop</a>
                 <a href="contact.php">contact</a>
