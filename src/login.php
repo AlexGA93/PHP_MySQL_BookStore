@@ -54,7 +54,7 @@
                 $_SESSION['user_id'] = $row['id'];
 
                 // redirect to home page
-                header('location:home.php');
+                header('location:index.php');
             }
 
         }else{
