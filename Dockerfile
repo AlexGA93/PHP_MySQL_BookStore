@@ -1,5 +1,8 @@
 # IMAGE
 FROM php:7.4-apache
+
+RUN docker-php-ext-install mysqli
+
 # We need to create inside the container's system our workdir path
 RUN mkdir -p /var/www/html
 

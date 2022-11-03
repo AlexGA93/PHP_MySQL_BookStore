@@ -1,12 +1,17 @@
 # PHP / MySQL - Web App
 
 ## Docker integration
-In this case We want to mount and start a container to start our app. For this We can use the following command to crate a simple Apache server:
-
-- We'll create a Docker file to define step by step to create our container.
+We'll define our Dockerfile instructions:
 ```
 # IMAGE
 FROM php:7.4-apache
+
+RUN docker-php-ext-install mysqli
+
+# We need to create inside the container's system our workdir path
+RUN mkdir -p /var/www/html
+
+WORKDIR /var/www/html
 
 # Copy local content (src/) in a specific container's path(/var/www/html)
 COPY src/ /var/www/html
@@ -14,15 +19,56 @@ COPY src/ /var/www/html
 #  port
 EXPOSE 80
 ```
-**NOTE**: We can see all the info at the [hub docker official site](https://hub.docker.com/_/php)
+## docker-compose
 
-- To initiate our Docker container we have to enter the followinfg instruction in the terminal:
-    
+We've to define our **docker-compose.yml** file:
 ```
-docker build -t php_crash_course .
+version: "3.1"
+services:
+    db:
+        container_name: mysql_db_container
+        image: mysql
+        ports: 
+            - "3306:3306"
+        command: --default-authentication-plugin=mysql_native_password
+        env_file:
+            - ./.env
+        environment:
+            MYSQL_DATABASE: ${MYSQL_DATABASE}
+            MYSQL_USER: ${MYSQL_USERNAME}
+            MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+            MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD} 
+        volumes:
+            # import sql database
+            - ./src/sql/shop_db.sql:/docker-entrypoint-initdb.d/shop_db.sql
+        networks:
+            - default
+    www:
+        build: .
+        ports: 
+            - "3000:80"
+        volumes:
+            - ./src:/var/www/html
+        links:
+            - db
+        networks:
+            - default
+    phpmyadmin:
+        image: phpmyadmin/phpmyadmin
+        container_name: php_container
+        links: 
+            - db:db
+        ports:
+            - 8000:80
+        env_file:
+            - ./.env
+        environment:
+            MYSQL_USER: ${MYSQL_ROOT_USERNAME}
+            MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+            MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD} 
+volumes:
+    persistent:
 ```
-- **docker build** will read our Dockerfile's content in the path (.)
-- **-t** will assign a name to our image
 
 ## Useful Docker Commands
 
